@@ -28,7 +28,7 @@ namespace YoutubeToMP3
 
         private void clearButton_Click(object sender, EventArgs e)
         {
-            download.ClearInfo(TextBox urlInput, ProgressBar progress);
+            download.ClearInfo(urlBox, progressBar);
         }
 
         private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
