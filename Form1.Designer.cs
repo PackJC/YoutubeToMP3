@@ -49,6 +49,7 @@
             toolTip1 = new ToolTip(components);
             aacRadio = new RadioButton();
             thumbnailCheckbox = new CheckBox();
+            button1 = new Button();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pictureBox2).BeginInit();
@@ -59,7 +60,7 @@
             urlBox.BorderStyle = BorderStyle.FixedSingle;
             urlBox.Location = new Point(64, 172);
             urlBox.Name = "urlBox";
-            urlBox.Size = new Size(425, 23);
+            urlBox.Size = new Size(379, 23);
             urlBox.TabIndex = 1;
             // 
             // downloadButton
@@ -241,6 +242,7 @@
             // 
             thumbnailCheckbox.AutoSize = true;
             thumbnailCheckbox.CheckAlign = ContentAlignment.MiddleRight;
+            thumbnailCheckbox.Enabled = false;
             thumbnailCheckbox.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
             thumbnailCheckbox.Location = new Point(288, 112);
             thumbnailCheckbox.Name = "thumbnailCheckbox";
@@ -250,11 +252,26 @@
             toolTip1.SetToolTip(thumbnailCheckbox, "Thumbnail of Video");
             thumbnailCheckbox.UseVisualStyleBackColor = true;
             // 
+            // button1
+            // 
+            button1.BackColor = Color.Transparent;
+            button1.FlatAppearance.BorderSize = 0;
+            button1.FlatStyle = FlatStyle.Flat;
+            button1.Font = new Font("Segoe UI", 14.25F, FontStyle.Regular, GraphicsUnit.Point);
+            button1.Image = (Image)resources.GetObject("button1.Image");
+            button1.Location = new Point(449, 163);
+            button1.Name = "button1";
+            button1.Size = new Size(37, 37);
+            button1.TabIndex = 19;
+            toolTip1.SetToolTip(button1, "Add to list");
+            button1.UseVisualStyleBackColor = false;
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(584, 361);
+            Controls.Add(button1);
             Controls.Add(thumbnailCheckbox);
             Controls.Add(aacRadio);
             Controls.Add(pictureBox2);
@@ -307,5 +324,6 @@
         private RadioButton aacRadio;
         private CheckBox thumbnailCheckbox;
         private ToolStripMenuItem darkModeToolStripMenuItem;
+        private Button button1;
     }
 }
