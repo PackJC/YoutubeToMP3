@@ -6,7 +6,7 @@ using YoutubeExplode.Videos.Streams;
 //urlBox.Text
 namespace YoutubeToMP3{
 	  public class Downloads{
-	  		public async void  DownloadAsync(String url, ProgressBar progress) {
+	  		public async void  DownloadAsync(String url, ProgressBar progress, string fileType) {
 
             // Check if the URL TextBox is empty or null
             if (string.IsNullOrWhiteSpace(url))
@@ -43,9 +43,10 @@ namespace YoutubeToMP3{
             // Use SaveFileDialog to ask the user where to save the MP3 file
             using (var saveFileDialog = new SaveFileDialog())
             {
-                saveFileDialog.Filter = "MP3 Files|*.mp3";
-                saveFileDialog.Title = "Save MP3 File";
+                saveFileDialog.Filter = $"{fileType.ToUpper()} Files|*.{fileType}";
+                saveFileDialog.Title = $"Save {fileType.ToUpper()} File";
                 saveFileDialog.FileName = safeFileName; // Suggest a filename
+
 
                 if (saveFileDialog.ShowDialog() == DialogResult.OK)
                 {
@@ -76,7 +77,7 @@ namespace YoutubeToMP3{
 
                         // Convert to MP3 using MediaToolkit
                         var inputFile = new MediaFile { Filename = videoPath };
-                        var outputFile = new MediaFile { Filename = saveFileDialog.FileName };
+                        var outputFile = new MediaFile { Filename = Path.ChangeExtension(saveFileDialog.FileName, fileType) };
 
                         using (var engine = new Engine())
                         {

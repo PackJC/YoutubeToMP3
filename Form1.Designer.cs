@@ -41,7 +41,7 @@
             progressBar = new ProgressBar();
             addButton = new Button();
             button2 = new Button();
-            listBox1 = new ListBox();
+            urlListBox = new ListBox();
             fileTypeLabel = new Label();
             mp3Radio = new RadioButton();
             opusRadio = new RadioButton();
@@ -112,6 +112,7 @@
             darkModeToolStripMenuItem.Name = "darkModeToolStripMenuItem";
             darkModeToolStripMenuItem.Size = new Size(165, 22);
             darkModeToolStripMenuItem.Text = "Dark Mode";
+            darkModeToolStripMenuItem.Click += darkModeToolStripMenuItem_Click;
             // 
             // checkForUpdateToolStripMenuItem
             // 
@@ -131,6 +132,7 @@
             // 
             // progressBar
             // 
+            progressBar.BackColor = Color.White;
             progressBar.Location = new Point(12, 306);
             progressBar.Name = "progressBar";
             progressBar.Size = new Size(560, 43);
@@ -164,16 +166,17 @@
             button2.TabIndex = 8;
             toolTip1.SetToolTip(button2, "Clear");
             button2.UseVisualStyleBackColor = false;
+            button2.Click += button2_Click;
             // 
-            // listBox1
+            // urlListBox
             // 
-            listBox1.FormattingEnabled = true;
-            listBox1.ItemHeight = 15;
-            listBox1.Location = new Point(12, 206);
-            listBox1.Name = "listBox1";
-            listBox1.Size = new Size(440, 94);
-            listBox1.TabIndex = 9;
-            toolTip1.SetToolTip(listBox1, "List of URLs");
+            urlListBox.FormattingEnabled = true;
+            urlListBox.ItemHeight = 15;
+            urlListBox.Location = new Point(12, 206);
+            urlListBox.Name = "urlListBox";
+            urlListBox.Size = new Size(440, 94);
+            urlListBox.TabIndex = 9;
+            toolTip1.SetToolTip(urlListBox, "List of URLs");
             // 
             // fileTypeLabel
             // 
@@ -258,7 +261,7 @@
             Controls.Add(opusRadio);
             Controls.Add(mp3Radio);
             Controls.Add(fileTypeLabel);
-            Controls.Add(listBox1);
+            Controls.Add(urlListBox);
             Controls.Add(button2);
             Controls.Add(addButton);
             Controls.Add(progressBar);
@@ -295,7 +298,7 @@
         private ProgressBar progressBar;
         private Button addButton;
         private Button button2;
-        private ListBox listBox1;
+        private ListBox urlListBox;
         private Label fileTypeLabel;
         private RadioButton mp3Radio;
         private RadioButton opusRadio;
