@@ -12,8 +12,8 @@ namespace YoutubeToMP3
         public Form1()
         {
             InitializeComponent();
-              progressBar.Value = 0;
-           
+            progressBar.Value = 0;
+
         }
 
         private async void downloadButton_ClickAsync(object sender, EventArgs e)
@@ -39,6 +39,11 @@ namespace YoutubeToMP3
         }
 
         private void checkForUpdateToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void Form1_Load(object sender, EventArgs e)
         {
 
         }

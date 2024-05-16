@@ -28,74 +28,65 @@
         /// </summary>
         private void InitializeComponent()
         {
+            components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
-            urlLabel = new Label();
             urlBox = new TextBox();
             downloadButton = new Button();
-            clearButton = new Button();
             pictureBox1 = new PictureBox();
             menuStrip1 = new MenuStrip();
             helpToolStripMenuItem = new ToolStripMenuItem();
+            darkModeToolStripMenuItem = new ToolStripMenuItem();
             checkForUpdateToolStripMenuItem = new ToolStripMenuItem();
             aboutToolStripMenuItem = new ToolStripMenuItem();
             progressBar = new ProgressBar();
+            addButton = new Button();
+            button2 = new Button();
+            listBox1 = new ListBox();
+            fileTypeLabel = new Label();
+            mp3Radio = new RadioButton();
+            opusRadio = new RadioButton();
+            pictureBox2 = new PictureBox();
+            toolTip1 = new ToolTip(components);
+            aacRadio = new RadioButton();
+            thumbnailCheckbox = new CheckBox();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             menuStrip1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)pictureBox2).BeginInit();
             SuspendLayout();
-            // 
-            // urlLabel
-            // 
-            urlLabel.AutoSize = true;
-            urlLabel.Font = new Font("Segoe UI Semibold", 14.25F, FontStyle.Bold, GraphicsUnit.Point);
-            urlLabel.Location = new Point(223, 144);
-            urlLabel.Name = "urlLabel";
-            urlLabel.Size = new Size(121, 25);
-            urlLabel.TabIndex = 0;
-            urlLabel.Text = "Youtube URL";
             // 
             // urlBox
             // 
             urlBox.BorderStyle = BorderStyle.FixedSingle;
-            urlBox.Location = new Point(12, 172);
+            urlBox.Location = new Point(64, 172);
             urlBox.Name = "urlBox";
-            urlBox.Size = new Size(479, 23);
+            urlBox.Size = new Size(425, 23);
             urlBox.TabIndex = 1;
             // 
             // downloadButton
             // 
-            downloadButton.BackColor = Color.LightGreen;
+            downloadButton.BackColor = Color.Transparent;
             downloadButton.FlatAppearance.BorderSize = 0;
             downloadButton.FlatStyle = FlatStyle.Flat;
             downloadButton.Font = new Font("Segoe UI", 14.25F, FontStyle.Regular, GraphicsUnit.Point);
-            downloadButton.Location = new Point(166, 201);
+            downloadButton.Image = (Image)resources.GetObject("downloadButton.Image");
+            downloadButton.Location = new Point(467, 206);
             downloadButton.Name = "downloadButton";
-            downloadButton.Size = new Size(250, 100);
+            downloadButton.Size = new Size(105, 94);
             downloadButton.TabIndex = 2;
-            downloadButton.Text = "Download";
+            toolTip1.SetToolTip(downloadButton, "Download");
             downloadButton.UseVisualStyleBackColor = false;
             downloadButton.Click += downloadButton_ClickAsync;
-            // 
-            // clearButton
-            // 
-            clearButton.BackColor = Color.LightCoral;
-            clearButton.FlatStyle = FlatStyle.Flat;
-            clearButton.Location = new Point(497, 172);
-            clearButton.Name = "clearButton";
-            clearButton.Size = new Size(75, 23);
-            clearButton.TabIndex = 3;
-            clearButton.Text = "Clear";
-            clearButton.UseVisualStyleBackColor = false;
-            clearButton.Click += clearButton_Click;
             // 
             // pictureBox1
             // 
             pictureBox1.Image = (Image)resources.GetObject("pictureBox1.Image");
-            pictureBox1.Location = new Point(12, 27);
+            pictureBox1.Location = new Point(12, 38);
             pictureBox1.Name = "pictureBox1";
-            pictureBox1.Size = new Size(560, 110);
+            pictureBox1.Size = new Size(262, 110);
             pictureBox1.SizeMode = PictureBoxSizeMode.Zoom;
             pictureBox1.TabIndex = 4;
             pictureBox1.TabStop = false;
+            toolTip1.SetToolTip(pictureBox1, "YouTubeToMP3");
             // 
             // menuStrip1
             // 
@@ -108,23 +99,33 @@
             // 
             // helpToolStripMenuItem
             // 
-            helpToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { checkForUpdateToolStripMenuItem, aboutToolStripMenuItem });
+            helpToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { darkModeToolStripMenuItem, checkForUpdateToolStripMenuItem, aboutToolStripMenuItem });
+            helpToolStripMenuItem.Image = (Image)resources.GetObject("helpToolStripMenuItem.Image");
             helpToolStripMenuItem.Name = "helpToolStripMenuItem";
-            helpToolStripMenuItem.Size = new Size(44, 20);
-            helpToolStripMenuItem.Text = "Help";
+            helpToolStripMenuItem.Size = new Size(28, 20);
+            helpToolStripMenuItem.ToolTipText = "Help";
             helpToolStripMenuItem.Click += helpToolStripMenuItem_Click;
+            // 
+            // darkModeToolStripMenuItem
+            // 
+            darkModeToolStripMenuItem.Image = (Image)resources.GetObject("darkModeToolStripMenuItem.Image");
+            darkModeToolStripMenuItem.Name = "darkModeToolStripMenuItem";
+            darkModeToolStripMenuItem.Size = new Size(165, 22);
+            darkModeToolStripMenuItem.Text = "Dark Mode";
             // 
             // checkForUpdateToolStripMenuItem
             // 
+            checkForUpdateToolStripMenuItem.Image = (Image)resources.GetObject("checkForUpdateToolStripMenuItem.Image");
             checkForUpdateToolStripMenuItem.Name = "checkForUpdateToolStripMenuItem";
-            checkForUpdateToolStripMenuItem.Size = new Size(180, 22);
+            checkForUpdateToolStripMenuItem.Size = new Size(165, 22);
             checkForUpdateToolStripMenuItem.Text = "Check for update";
             checkForUpdateToolStripMenuItem.Click += checkForUpdateToolStripMenuItem_Click;
             // 
             // aboutToolStripMenuItem
             // 
+            aboutToolStripMenuItem.Image = (Image)resources.GetObject("aboutToolStripMenuItem.Image");
             aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
-            aboutToolStripMenuItem.Size = new Size(180, 22);
+            aboutToolStripMenuItem.Size = new Size(165, 22);
             aboutToolStripMenuItem.Text = "About";
             aboutToolStripMenuItem.Click += aboutToolStripMenuItem_Click;
             // 
@@ -134,43 +135,174 @@
             progressBar.Name = "progressBar";
             progressBar.Size = new Size(560, 43);
             progressBar.TabIndex = 6;
+            toolTip1.SetToolTip(progressBar, "Download Progress");
+            // 
+            // addButton
+            // 
+            addButton.BackColor = Color.Transparent;
+            addButton.FlatAppearance.BorderSize = 0;
+            addButton.FlatStyle = FlatStyle.Flat;
+            addButton.Font = new Font("Segoe UI", 14.25F, FontStyle.Regular, GraphicsUnit.Point);
+            addButton.Image = (Image)resources.GetObject("addButton.Image");
+            addButton.Location = new Point(492, 163);
+            addButton.Name = "addButton";
+            addButton.Size = new Size(37, 37);
+            addButton.TabIndex = 7;
+            toolTip1.SetToolTip(addButton, "Add to list");
+            addButton.UseVisualStyleBackColor = false;
+            // 
+            // button2
+            // 
+            button2.BackColor = Color.Transparent;
+            button2.FlatAppearance.BorderSize = 0;
+            button2.FlatStyle = FlatStyle.Flat;
+            button2.Font = new Font("Segoe UI", 14.25F, FontStyle.Regular, GraphicsUnit.Point);
+            button2.Image = (Image)resources.GetObject("button2.Image");
+            button2.Location = new Point(535, 163);
+            button2.Name = "button2";
+            button2.Size = new Size(37, 37);
+            button2.TabIndex = 8;
+            toolTip1.SetToolTip(button2, "Clear");
+            button2.UseVisualStyleBackColor = false;
+            // 
+            // listBox1
+            // 
+            listBox1.FormattingEnabled = true;
+            listBox1.ItemHeight = 15;
+            listBox1.Location = new Point(12, 206);
+            listBox1.Name = "listBox1";
+            listBox1.Size = new Size(440, 94);
+            listBox1.TabIndex = 9;
+            toolTip1.SetToolTip(listBox1, "List of URLs");
+            // 
+            // fileTypeLabel
+            // 
+            fileTypeLabel.AutoSize = true;
+            fileTypeLabel.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            fileTypeLabel.Location = new Point(288, 75);
+            fileTypeLabel.Name = "fileTypeLabel";
+            fileTypeLabel.Size = new Size(77, 21);
+            fileTypeLabel.TabIndex = 10;
+            fileTypeLabel.Text = "File Type :";
+            // 
+            // mp3Radio
+            // 
+            mp3Radio.AutoSize = true;
+            mp3Radio.Checked = true;
+            mp3Radio.Font = new Font("Segoe UI", 9.75F, FontStyle.Regular, GraphicsUnit.Point);
+            mp3Radio.Location = new Point(376, 76);
+            mp3Radio.Name = "mp3Radio";
+            mp3Radio.Size = new Size(55, 21);
+            mp3Radio.TabIndex = 13;
+            mp3Radio.TabStop = true;
+            mp3Radio.Text = ".MP3";
+            toolTip1.SetToolTip(mp3Radio, "MPEG-1 Audio Layer III");
+            mp3Radio.UseVisualStyleBackColor = true;
+            // 
+            // opusRadio
+            // 
+            opusRadio.AutoSize = true;
+            opusRadio.Font = new Font("Segoe UI", 9.75F, FontStyle.Regular, GraphicsUnit.Point);
+            opusRadio.Location = new Point(445, 76);
+            opusRadio.Name = "opusRadio";
+            opusRadio.Size = new Size(57, 21);
+            opusRadio.TabIndex = 14;
+            opusRadio.Text = ".OGG";
+            toolTip1.SetToolTip(opusRadio, "Ogg Vorbis");
+            opusRadio.UseVisualStyleBackColor = true;
+            // 
+            // pictureBox2
+            // 
+            pictureBox2.Image = (Image)resources.GetObject("pictureBox2.Image");
+            pictureBox2.Location = new Point(12, 154);
+            pictureBox2.Name = "pictureBox2";
+            pictureBox2.Size = new Size(50, 50);
+            pictureBox2.SizeMode = PictureBoxSizeMode.Zoom;
+            pictureBox2.TabIndex = 15;
+            pictureBox2.TabStop = false;
+            toolTip1.SetToolTip(pictureBox2, "URL(s)");
+            // 
+            // aacRadio
+            // 
+            aacRadio.AutoSize = true;
+            aacRadio.Font = new Font("Segoe UI", 9.75F, FontStyle.Regular, GraphicsUnit.Point);
+            aacRadio.Location = new Point(508, 76);
+            aacRadio.Name = "aacRadio";
+            aacRadio.Size = new Size(53, 21);
+            aacRadio.TabIndex = 16;
+            aacRadio.Text = ".AAC";
+            toolTip1.SetToolTip(aacRadio, "Advanced Audio Coding");
+            aacRadio.UseVisualStyleBackColor = true;
+            // 
+            // thumbnailCheckbox
+            // 
+            thumbnailCheckbox.AutoSize = true;
+            thumbnailCheckbox.CheckAlign = ContentAlignment.MiddleRight;
+            thumbnailCheckbox.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            thumbnailCheckbox.Location = new Point(288, 112);
+            thumbnailCheckbox.Name = "thumbnailCheckbox";
+            thumbnailCheckbox.Size = new Size(103, 25);
+            thumbnailCheckbox.TabIndex = 18;
+            thumbnailCheckbox.Text = "Thumbnail";
+            toolTip1.SetToolTip(thumbnailCheckbox, "Thumbnail of Video");
+            thumbnailCheckbox.UseVisualStyleBackColor = true;
             // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(584, 361);
+            Controls.Add(thumbnailCheckbox);
+            Controls.Add(aacRadio);
+            Controls.Add(pictureBox2);
+            Controls.Add(opusRadio);
+            Controls.Add(mp3Radio);
+            Controls.Add(fileTypeLabel);
+            Controls.Add(listBox1);
+            Controls.Add(button2);
+            Controls.Add(addButton);
             Controls.Add(progressBar);
             Controls.Add(pictureBox1);
-            Controls.Add(clearButton);
             Controls.Add(downloadButton);
             Controls.Add(urlBox);
-            Controls.Add(urlLabel);
             Controls.Add(menuStrip1);
             FormBorderStyle = FormBorderStyle.FixedToolWindow;
             Icon = (Icon)resources.GetObject("$this.Icon");
             MainMenuStrip = menuStrip1;
+            MaximizeBox = false;
+            MaximumSize = new Size(600, 400);
+            MinimumSize = new Size(600, 400);
             Name = "Form1";
             StartPosition = FormStartPosition.CenterScreen;
-            Text = "YouTube → MP3";
+            Text = "YouTube → MP3, OGG, AAC";
+            Load += Form1_Load;
             ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
             menuStrip1.ResumeLayout(false);
             menuStrip1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)pictureBox2).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
 
         #endregion
-
-        private Label urlLabel;
         private TextBox urlBox;
         private Button downloadButton;
-        private Button clearButton;
         private PictureBox pictureBox1;
         private MenuStrip menuStrip1;
         private ToolStripMenuItem helpToolStripMenuItem;
         private ToolStripMenuItem checkForUpdateToolStripMenuItem;
         private ToolStripMenuItem aboutToolStripMenuItem;
         private ProgressBar progressBar;
+        private Button addButton;
+        private Button button2;
+        private ListBox listBox1;
+        private Label fileTypeLabel;
+        private RadioButton mp3Radio;
+        private RadioButton opusRadio;
+        private PictureBox pictureBox2;
+        private ToolTip toolTip1;
+        private RadioButton aacRadio;
+        private CheckBox thumbnailCheckbox;
+        private ToolStripMenuItem darkModeToolStripMenuItem;
     }
 }
