@@ -42,11 +42,20 @@ namespace YoutubeToMP3
                 fileType = "aac"; // Define your file type for radioButton3
             }
 
-            // Check if the thumbnail should be downloaded
-            bool downloadThumbnail = thumbnailCheckbox.Checked;
+            List<string> urls = new List<string>();
+            foreach (var item in urlListBox.Items)
+            {
+                urls.Add(item.ToString());
+            }
 
-            // Call the download method with the selected file type and thumbnail option
-            download.DownloadAsync(urlBox.Text, progressBar, fileType);
+            foreach (var url in urls)
+            {
+                await download.DownloadAsync(url, progressBar, fileType);
+
+            }
+
+            MessageBox.Show("All downloads complete!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
         }
 
         private void helpToolStripMenuItem_Click(object sender, EventArgs e)
@@ -78,9 +87,7 @@ namespace YoutubeToMP3
             }
 
             var release = JsonConvert.DeserializeObject<dynamic>(json);
-#pragma warning disable CS8602 // Dereference of a possibly null reference.
             string latestVersion = release.tag_name;
-#pragma warning restore CS8602 // Dereference of a possibly null reference.
             string downloadUrl = release.assets[0].browser_download_url;
 
             if (Version.Parse(latestVersion) > Version.Parse(currentVersion))
@@ -105,7 +112,7 @@ namespace YoutubeToMP3
         private void button2_Click(object sender, EventArgs e)
         {
             urlBox.Text = string.Empty;
-            urlListBox.Text = string.Empty;
+            urlListBox.Items.Clear();
             thumbnailCheckbox.Checked = false;
             mp3Radio.Checked = true;
         }
@@ -190,10 +197,14 @@ namespace YoutubeToMP3
 
         private void ApplyLightModeToControl(Control control)
         {
-            if (control is Button)
+            if (control is Button button)
             {
                 control.BackColor = Color.Transparent;
                 control.ForeColor = Color.Black;
+
+                button.FlatAppearance.MouseOverBackColor = Color.LightGray; // Darker shade for hover effect
+                button.FlatAppearance.MouseDownBackColor = Color.Gray; // Even darker shade for click effect
+
             }
             else if (control is TextBox || control is ComboBox)
             {
@@ -226,5 +237,63 @@ namespace YoutubeToMP3
             }
         }
 
+        private void addButton_Click(object sender, EventArgs e)
+        {
+            // Validate and add the URL from urlBox to urlListBox and clear urlBox
+            string url = urlBox.Text.Trim();
+            if (string.IsNullOrEmpty(url))
+            {
+                MessageBox.Show("Please enter a YouTube URL.", "Input Required", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            // Validate if the URL is a YouTube URL
+            try
+            {
+                var uri = new Uri(url);
+                var host = uri.Host.ToLower();
+                if (!host.Contains("youtube.com") && !host.Contains("youtu.be"))
+                {
+                    MessageBox.Show("Please enter a valid YouTube URL.", "Invalid URL", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+            }
+            catch (Exception)
+            {
+                MessageBox.Show("Please enter a valid YouTube URL.", "Invalid URL", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            // Add the valid URL to the urlListBox
+            urlListBox.Items.Add(url);
+            urlBox.Clear();
+
+        }
+
+        private void downloadSingleButton_Click(object sender, EventArgs e)
+        {
+            string fileType = "";
+
+            if (mp3Radio.Checked)
+            {
+                fileType = "mp3"; // Define your file type for radioButton1
+            }
+            else if (opusRadio.Checked)
+            {
+                fileType = "ogg"; // Define your file type for radioButton2
+            }
+            else if (aacRadio.Checked)
+            {
+                fileType = "aac"; // Define your file type for radioButton3
+            }
+
+            // Check if the thumbnail should be downloaded
+            bool downloadThumbnail = thumbnailCheckbox.Checked;
+
+            // Call the download method with the selected file type and thumbnail option
+            download.DownloadAsync(urlBox.Text, progressBar, fileType);
+
+
+        }
     }
 }

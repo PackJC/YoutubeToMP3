@@ -6,7 +6,8 @@ using YoutubeExplode.Videos.Streams;
 //urlBox.Text
 namespace YoutubeToMP3{
 	  public class Downloads{
-	  		public async void  DownloadAsync(String url, ProgressBar progress, string fileType) {
+	  		public async 	  		Task
+DownloadAsync(String url, ProgressBar progress, string fileType) {
 
             // Check if the URL TextBox is empty or null
             if (string.IsNullOrWhiteSpace(url))

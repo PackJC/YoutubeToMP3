@@ -39,8 +39,8 @@
             checkForUpdateToolStripMenuItem = new ToolStripMenuItem();
             aboutToolStripMenuItem = new ToolStripMenuItem();
             progressBar = new ProgressBar();
-            addButton = new Button();
-            button2 = new Button();
+            downloadSingleButton = new Button();
+            clearButton = new Button();
             urlListBox = new ListBox();
             fileTypeLabel = new Label();
             mp3Radio = new RadioButton();
@@ -49,7 +49,7 @@
             toolTip1 = new ToolTip(components);
             aacRadio = new RadioButton();
             thumbnailCheckbox = new CheckBox();
-            button1 = new Button();
+            addButton = new Button();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pictureBox2).BeginInit();
@@ -140,34 +140,35 @@
             progressBar.TabIndex = 6;
             toolTip1.SetToolTip(progressBar, "Download Progress");
             // 
-            // addButton
+            // downloadSingleButton
             // 
-            addButton.BackColor = Color.Transparent;
-            addButton.FlatAppearance.BorderSize = 0;
-            addButton.FlatStyle = FlatStyle.Flat;
-            addButton.Font = new Font("Segoe UI", 14.25F, FontStyle.Regular, GraphicsUnit.Point);
-            addButton.Image = (Image)resources.GetObject("addButton.Image");
-            addButton.Location = new Point(492, 163);
-            addButton.Name = "addButton";
-            addButton.Size = new Size(37, 37);
-            addButton.TabIndex = 7;
-            toolTip1.SetToolTip(addButton, "Add to list");
-            addButton.UseVisualStyleBackColor = false;
+            downloadSingleButton.BackColor = Color.Transparent;
+            downloadSingleButton.FlatAppearance.BorderSize = 0;
+            downloadSingleButton.FlatStyle = FlatStyle.Flat;
+            downloadSingleButton.Font = new Font("Segoe UI", 14.25F, FontStyle.Regular, GraphicsUnit.Point);
+            downloadSingleButton.Image = (Image)resources.GetObject("downloadSingleButton.Image");
+            downloadSingleButton.Location = new Point(492, 163);
+            downloadSingleButton.Name = "downloadSingleButton";
+            downloadSingleButton.Size = new Size(37, 37);
+            downloadSingleButton.TabIndex = 7;
+            toolTip1.SetToolTip(downloadSingleButton, "Add to list");
+            downloadSingleButton.UseVisualStyleBackColor = false;
+            downloadSingleButton.Click += downloadSingleButton_Click;
             // 
-            // button2
+            // clearButton
             // 
-            button2.BackColor = Color.Transparent;
-            button2.FlatAppearance.BorderSize = 0;
-            button2.FlatStyle = FlatStyle.Flat;
-            button2.Font = new Font("Segoe UI", 14.25F, FontStyle.Regular, GraphicsUnit.Point);
-            button2.Image = (Image)resources.GetObject("button2.Image");
-            button2.Location = new Point(535, 163);
-            button2.Name = "button2";
-            button2.Size = new Size(37, 37);
-            button2.TabIndex = 8;
-            toolTip1.SetToolTip(button2, "Clear");
-            button2.UseVisualStyleBackColor = false;
-            button2.Click += button2_Click;
+            clearButton.BackColor = Color.Transparent;
+            clearButton.FlatAppearance.BorderSize = 0;
+            clearButton.FlatStyle = FlatStyle.Flat;
+            clearButton.Font = new Font("Segoe UI", 14.25F, FontStyle.Regular, GraphicsUnit.Point);
+            clearButton.Image = (Image)resources.GetObject("clearButton.Image");
+            clearButton.Location = new Point(535, 163);
+            clearButton.Name = "clearButton";
+            clearButton.Size = new Size(37, 37);
+            clearButton.TabIndex = 8;
+            toolTip1.SetToolTip(clearButton, "Clear");
+            clearButton.UseVisualStyleBackColor = false;
+            clearButton.Click += button2_Click;
             // 
             // urlListBox
             // 
@@ -252,26 +253,27 @@
             toolTip1.SetToolTip(thumbnailCheckbox, "Thumbnail of Video");
             thumbnailCheckbox.UseVisualStyleBackColor = true;
             // 
-            // button1
+            // addButton
             // 
-            button1.BackColor = Color.Transparent;
-            button1.FlatAppearance.BorderSize = 0;
-            button1.FlatStyle = FlatStyle.Flat;
-            button1.Font = new Font("Segoe UI", 14.25F, FontStyle.Regular, GraphicsUnit.Point);
-            button1.Image = (Image)resources.GetObject("button1.Image");
-            button1.Location = new Point(449, 163);
-            button1.Name = "button1";
-            button1.Size = new Size(37, 37);
-            button1.TabIndex = 19;
-            toolTip1.SetToolTip(button1, "Add to list");
-            button1.UseVisualStyleBackColor = false;
+            addButton.BackColor = Color.Transparent;
+            addButton.FlatAppearance.BorderSize = 0;
+            addButton.FlatStyle = FlatStyle.Flat;
+            addButton.Font = new Font("Segoe UI", 14.25F, FontStyle.Regular, GraphicsUnit.Point);
+            addButton.Image = (Image)resources.GetObject("addButton.Image");
+            addButton.Location = new Point(449, 163);
+            addButton.Name = "addButton";
+            addButton.Size = new Size(37, 37);
+            addButton.TabIndex = 19;
+            toolTip1.SetToolTip(addButton, "Add to list");
+            addButton.UseVisualStyleBackColor = false;
+            addButton.Click += addButton_Click;
             // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(584, 361);
-            Controls.Add(button1);
+            Controls.Add(addButton);
             Controls.Add(thumbnailCheckbox);
             Controls.Add(aacRadio);
             Controls.Add(pictureBox2);
@@ -279,8 +281,8 @@
             Controls.Add(mp3Radio);
             Controls.Add(fileTypeLabel);
             Controls.Add(urlListBox);
-            Controls.Add(button2);
-            Controls.Add(addButton);
+            Controls.Add(clearButton);
+            Controls.Add(downloadSingleButton);
             Controls.Add(progressBar);
             Controls.Add(pictureBox1);
             Controls.Add(downloadButton);
@@ -313,8 +315,8 @@
         private ToolStripMenuItem checkForUpdateToolStripMenuItem;
         private ToolStripMenuItem aboutToolStripMenuItem;
         private ProgressBar progressBar;
-        private Button addButton;
-        private Button button2;
+        private Button downloadSingleButton;
+        private Button clearButton;
         private ListBox urlListBox;
         private Label fileTypeLabel;
         private RadioButton mp3Radio;
@@ -324,6 +326,6 @@
         private RadioButton aacRadio;
         private CheckBox thumbnailCheckbox;
         private ToolStripMenuItem darkModeToolStripMenuItem;
-        private Button button1;
+        private Button addButton;
     }
 }
