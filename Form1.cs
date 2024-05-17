@@ -295,5 +295,19 @@ namespace YoutubeToMP3
 
 
         }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            // Check if any item is selected
+            if (urlListBox.SelectedIndex != -1)
+            {
+                urlListBox.Items.RemoveAt(urlListBox.SelectedIndex);
+            }
+            else
+            {
+                MessageBox.Show("Please select an item to remove.");
+            }
+
+        }
     }
 }

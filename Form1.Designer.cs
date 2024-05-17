@@ -50,6 +50,7 @@
             aacRadio = new RadioButton();
             thumbnailCheckbox = new CheckBox();
             addButton = new Button();
+            button1 = new Button();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pictureBox2).BeginInit();
@@ -72,9 +73,9 @@
             downloadButton.Image = (Image)resources.GetObject("downloadButton.Image");
             downloadButton.Location = new Point(467, 206);
             downloadButton.Name = "downloadButton";
-            downloadButton.Size = new Size(105, 94);
+            downloadButton.Size = new Size(105, 59);
             downloadButton.TabIndex = 2;
-            toolTip1.SetToolTip(downloadButton, "Download");
+            toolTip1.SetToolTip(downloadButton, "Download All");
             downloadButton.UseVisualStyleBackColor = false;
             downloadButton.Click += downloadButton_ClickAsync;
             // 
@@ -151,7 +152,7 @@
             downloadSingleButton.Name = "downloadSingleButton";
             downloadSingleButton.Size = new Size(37, 37);
             downloadSingleButton.TabIndex = 7;
-            toolTip1.SetToolTip(downloadSingleButton, "Add to list");
+            toolTip1.SetToolTip(downloadSingleButton, "Download Single");
             downloadSingleButton.UseVisualStyleBackColor = false;
             downloadSingleButton.Click += downloadSingleButton_Click;
             // 
@@ -268,11 +269,23 @@
             addButton.UseVisualStyleBackColor = false;
             addButton.Click += addButton_Click;
             // 
+            // button1
+            // 
+            button1.Location = new Point(467, 271);
+            button1.Name = "button1";
+            button1.Size = new Size(105, 23);
+            button1.TabIndex = 20;
+            button1.Text = "Remove URL";
+            toolTip1.SetToolTip(button1, "Remove Selected URL");
+            button1.UseVisualStyleBackColor = true;
+            button1.Click += button1_Click;
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(584, 361);
+            Controls.Add(button1);
             Controls.Add(addButton);
             Controls.Add(thumbnailCheckbox);
             Controls.Add(aacRadio);
@@ -327,5 +340,6 @@
         private CheckBox thumbnailCheckbox;
         private ToolStripMenuItem darkModeToolStripMenuItem;
         private Button addButton;
+        private Button button1;
     }
 }
