@@ -4,11 +4,12 @@ using YoutubeExplode;
 using YoutubeExplode.Videos.Streams;
 
 //urlBox.Text
-namespace YoutubeToMP3{
-	  public class Downloads{
-	  		public async 	  		Task
-DownloadAsync(String url, ProgressBar progress, string fileType) {
-
+namespace YoutubeToMP3
+{
+    public class Downloads
+    {
+        public async Task DownloadAsync(String url, ProgressBar progress, string fileType)
+        {
             // Check if the URL TextBox is empty or null
             if (string.IsNullOrWhiteSpace(url))
             {
@@ -68,9 +69,9 @@ DownloadAsync(String url, ProgressBar progress, string fileType) {
                         // Create an instance of IProgress<double> to report progress
                         var progressHandler = new Progress<double>(val =>
                         {
-                            
-                                progress.Value = (int)(val * 100);
-                            
+
+                            progress.Value = (int)(val * 100);
+
                         });
 
                         // Download the video with progress reporting
@@ -102,13 +103,12 @@ DownloadAsync(String url, ProgressBar progress, string fileType) {
                     }
                 }
             }
+        }
 
-
-			}
-
-            public void ClearInfo(TextBox urlInput, ProgressBar progress)
+        public void ClearInfo(TextBox urlInput, ProgressBar progress)
         {
             urlInput.Clear();
             progress.Value = 0;
         }
-}}
+    }
+}
