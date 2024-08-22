@@ -48,10 +48,11 @@ namespace YoutubeToMP3
                 urls.Add(item.ToString());
             }
 
+            int VideoNumber = -1;
             foreach (var url in urls)
             {
-                await download.DownloadAsync(url, progressBar, fileType);
-
+                VideoNumber++;
+                await download.DownloadAsync(url, progressBar, fileType, VideoNumber, fileBox.Text, nameBox.Text);
             }
 
             MessageBox.Show("All downloads complete!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -291,7 +292,7 @@ namespace YoutubeToMP3
             bool downloadThumbnail = thumbnailCheckbox.Checked;
 
             // Call the download method with the selected file type and thumbnail option
-            download.DownloadAsync(urlBox.Text, progressBar, fileType);
+            download.DownloadAsync(urlBox.Text, progressBar, fileType, 0, fileBox.Text, nameBox.Text);
 
 
         }
@@ -307,6 +308,11 @@ namespace YoutubeToMP3
             {
                 MessageBox.Show("Please select an item to remove.");
             }
+
+        }
+
+        private void textBox1_TextChanged(object sender, EventArgs e)
+        {
 
         }
     }
