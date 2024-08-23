@@ -175,5 +175,31 @@ namespace YoutubeToMP3
             urlInput.Clear();
             progress.Value = 0;
         }
+
+        public async Task<string> getYouTubeName(String url) 
+        {
+            try
+            {
+                var uri = new Uri(url);
+                var host = uri.Host.ToLower();
+                if (!host.Contains("youtube.com") && !host.Contains("youtu.be"))
+                {
+                    MessageBox.Show("Please enter a valid YouTube URL.", "Invalid URL", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return "";
+                }
+            }
+            catch (Exception)
+            {
+                MessageBox.Show("Please enter a valid YouTube URL.", "Invalid URL", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return "";
+            }
+
+            // Initialize YoutubeExplode client and fetch video metadata
+            var youtube = new YoutubeClient();
+            var videoId = YoutubeExplode.Videos.VideoId.Parse(url);
+            var video = await youtube.Videos.GetAsync(videoId);
+            string videoTitle = video.Title;
+            return videoTitle;
+        }
     }
 }

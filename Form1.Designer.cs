@@ -54,6 +54,8 @@
             pictureBox3 = new PictureBox();
             fileBox = new TextBox();
             nameBox = new TextBox();
+            YouTubelabel = new Label();
+            nameLable = new Label();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pictureBox2).BeginInit();
@@ -68,6 +70,7 @@
             urlBox.Name = "urlBox";
             urlBox.Size = new Size(541, 31);
             urlBox.TabIndex = 3;
+            urlBox.TextChanged += urlBox_TextChanged;
             // 
             // downloadButton
             // 
@@ -88,7 +91,7 @@
             // pictureBox1
             // 
             pictureBox1.Image = (Image)resources.GetObject("pictureBox1.Image");
-            pictureBox1.Location = new Point(17, 63);
+            pictureBox1.Location = new Point(17, 40);
             pictureBox1.Margin = new Padding(4, 5, 4, 5);
             pictureBox1.Name = "pictureBox1";
             pictureBox1.Size = new Size(374, 183);
@@ -198,7 +201,7 @@
             // 
             fileTypeLabel.AutoSize = true;
             fileTypeLabel.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
-            fileTypeLabel.Location = new Point(411, 125);
+            fileTypeLabel.Location = new Point(408, 66);
             fileTypeLabel.Margin = new Padding(4, 0, 4, 0);
             fileTypeLabel.Name = "fileTypeLabel";
             fileTypeLabel.Size = new Size(121, 32);
@@ -210,7 +213,7 @@
             mp3Radio.AutoSize = true;
             mp3Radio.Checked = true;
             mp3Radio.Font = new Font("Segoe UI", 9.75F, FontStyle.Regular, GraphicsUnit.Point);
-            mp3Radio.Location = new Point(537, 127);
+            mp3Radio.Location = new Point(534, 68);
             mp3Radio.Margin = new Padding(4, 5, 4, 5);
             mp3Radio.Name = "mp3Radio";
             mp3Radio.Size = new Size(81, 32);
@@ -224,7 +227,7 @@
             // 
             opusRadio.AutoSize = true;
             opusRadio.Font = new Font("Segoe UI", 9.75F, FontStyle.Regular, GraphicsUnit.Point);
-            opusRadio.Location = new Point(636, 127);
+            opusRadio.Location = new Point(633, 68);
             opusRadio.Margin = new Padding(4, 5, 4, 5);
             opusRadio.Name = "opusRadio";
             opusRadio.Size = new Size(84, 32);
@@ -249,7 +252,7 @@
             // 
             aacRadio.AutoSize = true;
             aacRadio.Font = new Font("Segoe UI", 9.75F, FontStyle.Regular, GraphicsUnit.Point);
-            aacRadio.Location = new Point(726, 127);
+            aacRadio.Location = new Point(723, 68);
             aacRadio.Margin = new Padding(4, 5, 4, 5);
             aacRadio.Name = "aacRadio";
             aacRadio.Size = new Size(79, 32);
@@ -264,7 +267,7 @@
             thumbnailCheckbox.CheckAlign = ContentAlignment.MiddleRight;
             thumbnailCheckbox.Enabled = false;
             thumbnailCheckbox.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
-            thumbnailCheckbox.Location = new Point(411, 187);
+            thumbnailCheckbox.Location = new Point(408, 128);
             thumbnailCheckbox.Margin = new Padding(4, 5, 4, 5);
             thumbnailCheckbox.Name = "thumbnailCheckbox";
             thumbnailCheckbox.Size = new Size(154, 36);
@@ -304,7 +307,7 @@
             // pictureBox3
             // 
             pictureBox3.Image = (Image)resources.GetObject("pictureBox3.Image");
-            pictureBox3.Location = new Point(17, 256);
+            pictureBox3.Location = new Point(17, 227);
             pictureBox3.Margin = new Padding(4, 5, 4, 5);
             pictureBox3.Name = "pictureBox3";
             pictureBox3.Size = new Size(34, 40);
@@ -316,7 +319,7 @@
             // fileBox
             // 
             fileBox.BorderStyle = BorderStyle.FixedSingle;
-            fileBox.Location = new Point(59, 262);
+            fileBox.Location = new Point(59, 233);
             fileBox.Margin = new Padding(4, 5, 4, 5);
             fileBox.Name = "fileBox";
             fileBox.Size = new Size(317, 31);
@@ -325,18 +328,41 @@
             // nameBox
             // 
             nameBox.BorderStyle = BorderStyle.FixedSingle;
-            nameBox.Location = new Point(384, 262);
+            nameBox.Location = new Point(384, 233);
             nameBox.Margin = new Padding(4, 5, 4, 5);
             nameBox.Name = "nameBox";
             nameBox.Size = new Size(216, 31);
             nameBox.TabIndex = 2;
             nameBox.TextChanged += textBox1_TextChanged;
             // 
+            // YouTubelabel
+            // 
+            YouTubelabel.AutoSize = true;
+            YouTubelabel.Font = new Font("Segoe UI", 8F, FontStyle.Regular, GraphicsUnit.Point);
+            YouTubelabel.Location = new Point(59, 277);
+            YouTubelabel.Margin = new Padding(4, 0, 4, 0);
+            YouTubelabel.Name = "YouTubelabel";
+            YouTubelabel.Size = new Size(167, 21);
+            YouTubelabel.TabIndex = 22;
+            YouTubelabel.Text = "YouTube Video Name :";
+            // 
+            // nameLable
+            // 
+            nameLable.AutoSize = true;
+            nameLable.Font = new Font("Segoe UI", 8F, FontStyle.Regular, GraphicsUnit.Point);
+            nameLable.Location = new Point(224, 277);
+            nameLable.Margin = new Padding(4, 0, 4, 0);
+            nameLable.Name = "nameLable";
+            nameLable.Size = new Size(0, 21);
+            nameLable.TabIndex = 23;
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(10F, 25F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(826, 573);
+            Controls.Add(nameLable);
+            Controls.Add(YouTubelabel);
             Controls.Add(nameBox);
             Controls.Add(fileBox);
             Controls.Add(pictureBox3);
@@ -401,5 +427,7 @@
         private PictureBox pictureBox3;
         private TextBox fileBox;
         private TextBox nameBox;
+        private Label YouTubelabel;
+        private Label nameLable;
     }
 }
