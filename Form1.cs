@@ -1,5 +1,4 @@
-using System.Diagnostics;
-using System.Net;
+﻿using System.Diagnostics;
 using MediaToolkit.Model;
 using MediaToolkit;
 using YoutubeExplode;
@@ -11,7 +10,7 @@ namespace YoutubeToMP3
 {
     public partial class Form1 : Form
     {
-        private readonly Version _version = Assembly.GetExecutingAssembly().GetName().Version;
+        private readonly Version _version = Assembly.GetExecutingAssembly().GetName().Version ?? new Version(1, 0);
         private string repoOwner = "PackJC"; // Replace with your GitHub username
         private string repoName = "YoutubeToMP3"; // Replace with your repository name
         string currentVersion;
@@ -25,36 +24,59 @@ namespace YoutubeToMP3
 
         }
 
+        private string GetSelectedFileType()
+        {
+            if (opusRadio.Checked)
+            {
+                return "ogg";
+            }
+            if (aacRadio.Checked)
+            {
+                return "aac";
+            }
+            return "mp3";
+        }
+
+        // Prevent starting another download while one is in progress
+        private void SetBusy(bool busy)
+        {
+            downloadButton.Enabled = !busy;
+            downloadSingleButton.Enabled = !busy;
+            addButton.Enabled = !busy;
+            button1.Enabled = !busy;
+            clearButton.Enabled = !busy;
+        }
+
         private async void downloadButton_ClickAsync(object sender, EventArgs e)
         {
-            string fileType = "";
-
-            if (mp3Radio.Checked)
+            if (urlListBox.Items.Count == 0)
             {
-                fileType = "mp3"; // Define your file type for radioButton1
-            }
-            else if (opusRadio.Checked)
-            {
-                fileType = "ogg"; // Define your file type for radioButton2
-            }
-            else if (aacRadio.Checked)
-            {
-                fileType = "aac"; // Define your file type for radioButton3
+                MessageBox.Show("Add at least one URL to the list first.", "Input Required", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
             }
 
-            List<string> urls = new List<string>();
-            foreach (var item in urlListBox.Items)
+            string fileType = GetSelectedFileType();
+            List<string> urls = urlListBox.Items.Cast<object>().Select(item => item.ToString() ?? "").ToList();
+
+            SetBusy(true);
+            int succeeded = 0;
+            try
             {
-                urls.Add(item.ToString());
+                foreach (var url in urls)
+                {
+                    if (await download.DownloadAsync(url, progressBar, fileType, showCompletionMessage: false))
+                    {
+                        succeeded++;
+                    }
+                }
+            }
+            finally
+            {
+                SetBusy(false);
             }
 
-            foreach (var url in urls)
-            {
-                await download.DownloadAsync(url, progressBar, fileType);
-
-            }
-
-            MessageBox.Show("All downloads complete!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            MessageBox.Show($"{succeeded} of {urls.Count} downloads complete!", "Finished", MessageBoxButtons.OK,
+                succeeded == urls.Count ? MessageBoxIcon.Information : MessageBoxIcon.Warning);
 
         }
 
@@ -75,31 +97,38 @@ namespace YoutubeToMP3
 
         }
 
-        private void checkForUpdateToolStripMenuItem_Click(object sender, EventArgs e)
+        private async void checkForUpdateToolStripMenuItem_Click(object sender, EventArgs e)
         {
             string latestReleaseUrl = $"https://api.github.com/repos/{repoOwner}/{repoName}/releases/latest";
-            string json;
 
-            using (WebClient wc = new WebClient())
+            try
             {
-                wc.Headers.Add("User-Agent", "request"); // GitHub API requires a user-agent
-                json = wc.DownloadString(latestReleaseUrl);
-            }
-
-            var release = JsonConvert.DeserializeObject<dynamic>(json);
-            string latestVersion = release.tag_name;
-            string downloadUrl = release.assets[0].browser_download_url;
-
-            if (Version.Parse(latestVersion) > Version.Parse(currentVersion))
-            {
-                if (MessageBox.Show($"Update available: {latestVersion}\nDo you want to download it?", "Update Available", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                string json;
+                using (var client = new HttpClient())
                 {
-                    Process.Start(new ProcessStartInfo(downloadUrl) { UseShellExecute = true });
+                    client.DefaultRequestHeaders.UserAgent.ParseAdd("YoutubeToMP3"); // GitHub API requires a user-agent
+                    json = await client.GetStringAsync(latestReleaseUrl);
+                }
+
+                var release = JsonConvert.DeserializeObject<dynamic>(json);
+                string latestVersion = ((string)release!.tag_name).TrimStart('v', 'V');
+                string? downloadUrl = release.assets.Count > 0 ? (string)release.assets[0].browser_download_url : (string)release.html_url;
+
+                if (Version.TryParse(latestVersion, out var latest) && latest > Version.Parse(currentVersion))
+                {
+                    if (MessageBox.Show($"Update available: {latestVersion}\nDo you want to download it?", "Update Available", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                    {
+                        Process.Start(new ProcessStartInfo(downloadUrl!) { UseShellExecute = true });
+                    }
+                }
+                else
+                {
+                    MessageBox.Show("Your application is up to date.");
                 }
             }
-            else
+            catch (Exception ex)
             {
-                MessageBox.Show("Your application is up to date.");
+                MessageBox.Show($"Could not check for updates:\n{ex.Message}", "Update Check Failed", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
 
         }
@@ -270,29 +299,22 @@ namespace YoutubeToMP3
 
         }
 
-        private void downloadSingleButton_Click(object sender, EventArgs e)
+        private async void downloadSingleButton_Click(object sender, EventArgs e)
         {
-            string fileType = "";
+            string fileType = GetSelectedFileType();
 
-            if (mp3Radio.Checked)
+            SetBusy(true);
+            try
             {
-                fileType = "mp3"; // Define your file type for radioButton1
+                if (await download.DownloadAsync(urlBox.Text, progressBar, fileType))
+                {
+                    urlBox.Clear();
+                }
             }
-            else if (opusRadio.Checked)
+            finally
             {
-                fileType = "ogg"; // Define your file type for radioButton2
+                SetBusy(false);
             }
-            else if (aacRadio.Checked)
-            {
-                fileType = "aac"; // Define your file type for radioButton3
-            }
-
-            // Check if the thumbnail should be downloaded
-            bool downloadThumbnail = thumbnailCheckbox.Checked;
-
-            // Call the download method with the selected file type and thumbnail option
-            download.DownloadAsync(urlBox.Text, progressBar, fileType);
-
 
         }
 

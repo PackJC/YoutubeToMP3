@@ -3,112 +3,119 @@ using MediaToolkit;
 using YoutubeExplode;
 using YoutubeExplode.Videos.Streams;
 
-//urlBox.Text
-namespace YoutubeToMP3{
-	  public class Downloads{
-	  		public async 	  		Task
-DownloadAsync(String url, ProgressBar progress, string fileType) {
+namespace YoutubeToMP3
+{
+    public class Downloads
+    {
+        private readonly YoutubeClient youtube = new YoutubeClient();
 
-            // Check if the URL TextBox is empty or null
+        // Returns true if the file was downloaded and converted successfully
+        public async Task<bool> DownloadAsync(string url, ProgressBar progress, string fileType, bool showCompletionMessage = true)
+        {
+            // Check if the URL is empty or null
             if (string.IsNullOrWhiteSpace(url))
             {
                 MessageBox.Show("Please enter a YouTube URL.", "Input Required", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
+                return false;
             }
-            // Validate if the URL is a YouTube URL
+
+            // Validate if the URL is a YouTube video URL (playlist links with a v= parameter are fine)
+            var videoId = YoutubeExplode.Videos.VideoId.TryParse(url.Trim());
+            if (videoId == null)
+            {
+                MessageBox.Show("Please enter a valid YouTube video URL.", "Invalid URL", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return false;
+            }
+
+            string? tempPath = null;
             try
             {
-                var uri = new Uri(url);
-                var host = uri.Host.ToLower();
-                if (!host.Contains("youtube.com") && !host.Contains("youtu.be"))
+                // Fetch video metadata
+                var video = await youtube.Videos.GetAsync(videoId.Value);
+
+                // Sanitize the video title to be a valid filename
+                var invalidChars = Path.GetInvalidFileNameChars();
+                var safeFileName = string.Join("_", video.Title.Split(invalidChars, StringSplitOptions.RemoveEmptyEntries)).Trim();
+
+                // Ask the user where to save the file
+                string outputPath;
+                using (var saveFileDialog = new SaveFileDialog())
                 {
-                    MessageBox.Show("Please enter a valid YouTube URL.", "Invalid URL", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    return;
+                    saveFileDialog.Filter = $"{fileType.ToUpper()} Files|*.{fileType}";
+                    saveFileDialog.Title = $"Save {fileType.ToUpper()} File";
+                    saveFileDialog.FileName = safeFileName; // Suggest a filename
+
+                    if (saveFileDialog.ShowDialog() != DialogResult.OK)
+                    {
+                        return false;
+                    }
+                    outputPath = Path.ChangeExtension(saveFileDialog.FileName, fileType);
                 }
-            }
-            catch (Exception)
-            {
-                MessageBox.Show("Please enter a valid YouTube URL.", "Invalid URL", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
-            }
-            // Initialize YoutubeExplode client and fetch video metadata
-            var youtube = new YoutubeClient();
-            var videoId = YoutubeExplode.Videos.VideoId.Parse(url);
-            var video = await youtube.Videos.GetAsync(videoId);
-            var videoTitle = video.Title;
 
-            // Sanitize the video title to be a valid filename
-            var invalidChars = Path.GetInvalidFileNameChars();
-            var safeFileName = string.Join("_", videoTitle.Split(invalidChars, StringSplitOptions.RemoveEmptyEntries)).Trim();
+                // YouTube no longer serves muxed (audio + video) streams for most videos, so grab the best audio-only stream
+                var streamManifest = await youtube.Videos.Streams.GetManifestAsync(videoId.Value);
+                var streamInfo = streamManifest.GetAudioOnlyStreams().GetWithHighestBitrate();
 
-            // Use SaveFileDialog to ask the user where to save the MP3 file
-            using (var saveFileDialog = new SaveFileDialog())
-            {
-                saveFileDialog.Filter = $"{fileType.ToUpper()} Files|*.{fileType}";
-                saveFileDialog.Title = $"Save {fileType.ToUpper()} File";
-                saveFileDialog.FileName = safeFileName; // Suggest a filename
+                // Temporarily download the audio
+                tempPath = Path.Combine(Path.GetTempPath(), $"{videoId}.{streamInfo.Container.Name}");
 
+                // Initialize the progress bar
+                progress.Value = 0;
+                progress.Maximum = 100;
 
-                if (saveFileDialog.ShowDialog() == DialogResult.OK)
+                // Create an instance of IProgress<double> to report progress
+                var progressHandler = new Progress<double>(val =>
                 {
-                    // Process the URL and download the video
-                    try
+                    progress.Value = Math.Clamp((int)(val * 100), 0, 100);
+                });
+
+                // Download the audio with progress reporting
+                await youtube.Videos.Streams.DownloadAsync(streamInfo, tempPath, progressHandler);
+
+                // Convert to the selected format using MediaToolkit (off the UI thread so the window stays responsive)
+                var inputFile = new MediaFile { Filename = tempPath };
+                var outputFile = new MediaFile { Filename = outputPath };
+
+                await Task.Run(() =>
+                {
+                    using (var engine = new Engine())
                     {
-                        // Get the stream manifest and select the best muxed stream (audio + video)
-                        var streamManifest = await youtube.Videos.Streams.GetManifestAsync(videoId);
-                        var streamInfo = streamManifest.GetMuxedStreams().GetWithHighestVideoQuality();
-
-                        // Temporarily download the video
-                        var videoPath = Path.Combine(Path.GetTempPath(), $"{videoId}.mp4");
-
-                        // Initialize the progress bar
-                        progress.Value = 0;
-                        progress.Maximum = 100;
-
-                        // Create an instance of IProgress<double> to report progress
-                        var progressHandler = new Progress<double>(val =>
-                        {
-                            
-                                progress.Value = (int)(val * 100);
-                            
-                        });
-
-                        // Download the video with progress reporting
-                        await youtube.Videos.Streams.DownloadAsync(streamInfo, videoPath, progressHandler);
-
-                        // Convert to MP3 using MediaToolkit
-                        var inputFile = new MediaFile { Filename = videoPath };
-                        var outputFile = new MediaFile { Filename = Path.ChangeExtension(saveFileDialog.FileName, fileType) };
-
-                        using (var engine = new Engine())
-                        {
-                            engine.GetMetadata(inputFile);
-                            engine.Convert(inputFile, outputFile);
-                        }
-
-                        // Clean up the temporary video file
-                        File.Delete(videoPath);
-
-                        // Update UI and show completion message
-                        MessageBox.Show("Download complete!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                        url = string.Empty;
-                        progress.Value = 0; // Reset progress bar after completion
-
+                        engine.GetMetadata(inputFile);
+                        engine.Convert(inputFile, outputFile);
                     }
-                    catch (Exception ex)
-                    {
-                        MessageBox.Show($"An error occurred: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                        progress.Value = 0; // Reset progress bar in case of error
-                    }
+                });
+
+                if (!File.Exists(outputPath))
+                {
+                    throw new IOException("Conversion failed, no output file was created.");
                 }
+
+                if (showCompletionMessage)
+                {
+                    MessageBox.Show("Download complete!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+                return true;
             }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"An error occurred downloading {url}:\n{ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return false;
+            }
+            finally
+            {
+                // Clean up the temporary file
+                if (tempPath != null && File.Exists(tempPath))
+                {
+                    File.Delete(tempPath);
+                }
+                progress.Value = 0; // Reset progress bar
+            }
+        }
 
-
-			}
-
-            public void ClearInfo(TextBox urlInput, ProgressBar progress)
+        public void ClearInfo(TextBox urlInput, ProgressBar progress)
         {
             urlInput.Clear();
             progress.Value = 0;
         }
-}}
+    }
+}
